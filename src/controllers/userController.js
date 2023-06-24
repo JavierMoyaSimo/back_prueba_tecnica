@@ -1,31 +1,34 @@
+const UserModel = require("../models/userModel");
 const databaseConection = require("../db");
 const HandleError = require("./handleError");
 const Security = require("../services/securityProvider");
 const security = new Security();
 const CryptoJS = require("crypto-js");
 
-async function createUser(name, phone, email, password) {
-  const db = await databaseConection.GetConection();
+//CREAR USUARIO
+const createUser = async (name, phone, email, password) => {
+  try {
+    const doesEmailExist = await UserModel.findOne({
+      email: email,
+    }).exec();
 
-  const doesEmailExist = await db.collection("Users").findOne({
-    email: email,
-  });
+    if (doesEmailExist) {
+      throw new CreateUserException(CreateUserException.emailAlreadyInUser);
+    }
 
-  if (doesEmailExist) {
-    throw new CreateUserException(CreateUserException.emailAlreadyInUser);
+    const newUser = new UserModel({
+      name: name,
+      phone: phone,
+      email: email,
+      password: security.encryptData(password), // Guardamos el password encriptado en la bbdd
+    });
+
+    await newUser.save();
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
-
-  const newUser = {
-    name: name,
-    phone: phone,
-    email: email,
-    password: security.encryptData(password),
-  };
-
-  const createdUser = await db.collection("Users").insertOne(newUser);
-
-  return createdUser;
-}
+};
 
 async function loginByEmail(email, password) {
   let db = await databaseConection.GetConection();

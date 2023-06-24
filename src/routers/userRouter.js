@@ -9,8 +9,8 @@ const {
 } = require("../controllers/userController");
 
 
-
-usersRouter.post("/", async (request, response) => {
+//Esta ruta es en mongodb://localhost:27017/
+usersRouter.post("/adduser", async (request, response) => {
   const name = request.body.name;
   const phone = request.body.phone;
   const email = request.body.email;
@@ -19,7 +19,7 @@ usersRouter.post("/", async (request, response) => {
   let response_user = null;
   let response_result = null;
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !phone ) {
     response_result = CreateUserException.incorrectParameters;
   } else {
     try {
@@ -27,7 +27,7 @@ usersRouter.post("/", async (request, response) => {
 
       response_result = CreateUserException.success;
     } catch (error) {
-      console.log("errorrrr", error);
+      console.log("error", error);
       if (error.code != null) {
         response_result = error.code;
       } else {
@@ -42,6 +42,7 @@ usersRouter.post("/", async (request, response) => {
   });
 });
 
+//Esta ruta es en mongodb://localhost:27017/user/login
 usersRouter.post("/login", async (request, response) => {
   let email = request.body.email;
   let password = request.body.password;

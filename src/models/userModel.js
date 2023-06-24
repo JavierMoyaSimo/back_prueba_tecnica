@@ -1,4 +1,3 @@
-// TODO ESTO ES NUEVO!
 const mongoose = require("../db");
 
 const userSchema = {
@@ -17,8 +16,12 @@ const userSchema = {
   email: {
     type: "String",
     unique: true,
+    required: true,
   },
-  password: "String",
+  password: {
+    type: "String",
+    required: true,
+  },
   create: {
     type: Date,
     default: Date.now,
