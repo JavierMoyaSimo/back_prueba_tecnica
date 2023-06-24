@@ -59,7 +59,7 @@ usersRouter.post("/login", async (request, response) => {
 
       response_result = LoginByEmailException.success;
     } catch (error) {
-      console.log(error.message);
+      console.log(error.message );
       if (error.code != null) {
         response_result = error.code;
       } else {
