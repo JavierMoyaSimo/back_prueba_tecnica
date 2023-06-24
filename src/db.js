@@ -2,6 +2,7 @@ require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
 const URL = process.env.URI;
 const databaseName = "develop";
+
 var DbConnection = function () {
   var client = null;
 
@@ -51,4 +52,30 @@ var DbConnection = function () {
   return { GetConection: Get, GetClient: GetClient };
 };
 
+
+//NO ES NECESARIO LLAMAR A LA FUNCIÓN A LA HORA DE EXPORTARLA. ESTARÍA MEJOR EXPORTARLO ASI:
+// module.exports = DbConnection;
+
 module.exports = DbConnection();
+
+// CON MONGOOSE SERIA TODO MUCHO MAS SIMPLE, MAS INTUITIVO:
+
+/* 
+require("dotenv").config();
+const mongoose = require("mongoose");
+
+const URL = process.env.URI;
+const databaseName = "develop";
+
+mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("DB Connected");
+  })
+  .catch((error) => {
+    console.error("DB Connection Error:", error);
+  });
+
+const dbConnection = mongoose.connection;
+
+module.exports = dbConnection;
+*/

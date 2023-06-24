@@ -48,6 +48,7 @@ async function loginByEmail(email, password) {
   return user;
 }
 
+//ESTO ESTÁ MAL YA QUE NO PUEDES DECIR A UN USUARIO SI ES EL NOMBRE DE USUARIO O LA CONTRASEÑA LA QUE ESTÁ MAL, YA QUE NO ES SEGURO
 class LoginByEmailException extends HandleError {
   static errorIncorrectPassword = "INCORRECT_PASSWORD";
   static errorIncorrectEmail = "UNKNOWN_EMAIL";

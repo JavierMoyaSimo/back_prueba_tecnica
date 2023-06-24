@@ -1,11 +1,14 @@
 const express = require("express");
+const usersRouter = express.Router();
+
 const {
   createUser,
   CreateUserException,
   loginByEmail,
   LoginByEmailException,
 } = require("../controllers/userController");
-const usersRouter = express.Router();
+
+
 
 usersRouter.post("/", async (request, response) => {
   const name = request.body.name;
@@ -45,6 +48,7 @@ usersRouter.post("/login", async (request, response) => {
 
   let response_user = null;
   let response_result = null;
+  
   if (email == null || password == null) {
     response_result = LoginByEmailException.incorrectParameters;
   } else {
