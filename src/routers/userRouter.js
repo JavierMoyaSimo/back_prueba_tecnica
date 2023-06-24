@@ -9,7 +9,7 @@ const {
 } = require("../controllers/userController");
 
 
-//Esta ruta es en mongodb://localhost:27017/develop/adduser
+//Add user
 usersRouter.post("/adduser", async (request, response) => {
   const name = request.body.name;
   const phone = request.body.phone;
@@ -23,9 +23,10 @@ usersRouter.post("/adduser", async (request, response) => {
     response_result = CreateUserException.incorrectParameters;
   } else {
     try {
-      response_user = await createUser(name, phone, email, password);
+      response_user = await createUser(name, phone, email, password,response);
 
       response_result = CreateUserException.success;
+      
     } catch (error) {
       console.log("error", error);
       if (error.code != null) {
@@ -42,7 +43,7 @@ usersRouter.post("/adduser", async (request, response) => {
   });
 });
 
-//Esta ruta es en mongodb://localhost:27017/develop/login
+//Login user
 usersRouter.post("/login", async (request, response) => {
   let email = request.body.email;
   let password = request.body.password;

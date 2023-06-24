@@ -1,4 +1,5 @@
 const mongoose = require("../config/mongoose.config");
+//const mongoose = require ("mongoose");
 
 const userSchema = {
   name: {
@@ -21,10 +22,6 @@ const userSchema = {
   password: {
     type: "String",
     required: true,
-  },
-  create: {
-    type: Date,
-    default: Date.now,
   },
 };
 
