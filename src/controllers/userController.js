@@ -6,7 +6,7 @@ const security = new Security();
 const jsonwebtoken = require("jsonwebtoken");
 
 //CREAR USUARIO
-const createUser = async (name, phone, email, password, response) => {
+const createUser = async (name, phone, email, password) => {
   try {
     const doesEmailExist = await UserModel.findOne({
       email: email,
@@ -64,15 +64,15 @@ const loginByEmail = async (email, password) => {
       secret
     );
 
-    return res.status(200).json({
+    return {
       message: "Login successful",
       jwt: jwt,
       name: user.name,
       phone: user.phone,
       email: user.email,
-    });
+    };
   } catch (error) {
-    return res.send(error);
+    throw error;
   }
 };
 
