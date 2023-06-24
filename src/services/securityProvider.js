@@ -3,7 +3,7 @@ require("dotenv").config();
 const salt = process.env.SALT;
 
 class Security {
-  // ESTO ES PARA ENCRIPTAR 
+  // ESTO ES PARA ENCRIPTAR
   //PRIMER PARAMETRO: TEXTO A ENCRIPTAR
   //SEGUNDO PARAMETRO: CLAVE/CONTRASEÑA
   //ESTO NOS DEVUELVE POR LO TANTO, EL TEXTO YA ENCRIPTADO (LA CONTRASEÑA ENCRIPTADA)
@@ -22,7 +22,9 @@ class Security {
   }
   */
   decryptData(dataToDecrypt) {
-    return CryptoJS.AES.decrypt(dataToDecrypt, salt);
+    return CryptoJS.AES.decrypt(dataToDecrypt, salt).toString(
+      CryptoJS.enc.Utf8
+    );
   }
 }
 module.exports = Security;

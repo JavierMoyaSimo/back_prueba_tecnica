@@ -9,7 +9,7 @@ const {
 } = require("../controllers/userController");
 
 
-//Esta ruta es en mongodb://localhost:27017/
+//Esta ruta es en mongodb://localhost:27017/develop/adduser
 usersRouter.post("/adduser", async (request, response) => {
   const name = request.body.name;
   const phone = request.body.phone;
@@ -42,7 +42,7 @@ usersRouter.post("/adduser", async (request, response) => {
   });
 });
 
-//Esta ruta es en mongodb://localhost:27017/user/login
+//Esta ruta es en mongodb://localhost:27017/develop/login
 usersRouter.post("/login", async (request, response) => {
   let email = request.body.email;
   let password = request.body.password;

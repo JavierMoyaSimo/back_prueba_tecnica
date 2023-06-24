@@ -1,9 +1,8 @@
 const UserModel = require("../models/userModel");
-const databaseConection = require("../db");
 const HandleError = require("./handleError");
 const Security = require("../services/securityProvider");
 const security = new Security();
-const CryptoJS = require("crypto-js");
+// const CryptoJS = require("crypto-js");
 
 //CREAR USUARIO
 const createUser = async (name, phone, email, password) => {
@@ -30,32 +29,31 @@ const createUser = async (name, phone, email, password) => {
   }
 };
 
-async function loginByEmail(email, password) {
-  let db = await databaseConection.GetConection();
-
-  const user = await db.collection("Users").findOne({
+const loginByEmail = async (email, password) => {
+  
+  const user = await UserModel.findOne({
     email: email,
-  });
-  if (user == null) {
-    throw new LoginByEmailException(LoginByEmailException.errorIncorrectEmail);
-  }
-  const bytes = security.decryptData(user.password);
-  const originalText = bytes.toString(CryptoJS.enc.Utf8);
+  }).exec();
 
-  if (originalText != password) {
+  if (!user) {
+    throw new LoginByEmailException(LoginByEmailException.errorIncorrectEmailorPassword);
+  }
+  const originalPassword = security.decryptData(user.password);
+  
+
+  if (originalPassword != password) {
     throw new LoginByEmailException(
-      LoginByEmailException.errorIncorrectPassword
+      LoginByEmailException.errorIncorrectEmailorPassword
     );
   }
 
   return user;
-}
+};
 
-//ESTO ESTÁ MAL YA QUE NO PUEDES DECIR A UN USUARIO SI ES EL NOMBRE DE USUARIO O LA CONTRASEÑA LA QUE ESTÁ MAL, YA QUE NO ES SEGURO
+
+
 class LoginByEmailException extends HandleError {
-  static errorIncorrectPassword = "INCORRECT_PASSWORD";
-  static errorIncorrectEmail = "UNKNOWN_EMAIL";
-  //Por seguridad es correcto?
+  static errorIncorrectEmailorPassword = "INCORRECT_EMAIL_OR_PASSWORD";
   constructor(code) {
     super("Login By Email", code);
   }
