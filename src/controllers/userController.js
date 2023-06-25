@@ -5,8 +5,8 @@ const security = new Security();
 // const CryptoJS = require("crypto-js");
 const jsonwebtoken = require("jsonwebtoken");
 
-//CREAR USUARIO
-const createUser = async (name, phone, email, password) => {
+//CREATE USER
+const createUser = async (name, phone, email, password, rol) => {
   try {
     const doesEmailExist = await UserModel.findOne({
       email: email,
@@ -21,6 +21,7 @@ const createUser = async (name, phone, email, password) => {
       phone: phone,
       email: email,
       password: security.encryptData(password), // Guardamos el password encriptado en la bbdd
+      rol: rol,
     });
 
     await newUser.save();
@@ -30,7 +31,7 @@ const createUser = async (name, phone, email, password) => {
   }
 };
 
-//LOGIN USUARIO
+//LOGIN USER
 const loginByEmail = async (email, password) => {
   try {
     const user = await UserModel.findOne({
@@ -60,6 +61,7 @@ const loginByEmail = async (email, password) => {
         name: user.name,
         phone: user.phone,
         email: user.email,
+        rol: user.rol,
       },
       secret
     );
@@ -70,11 +72,23 @@ const loginByEmail = async (email, password) => {
       name: user.name,
       phone: user.phone,
       email: user.email,
+      rol: user.rol,
     };
   } catch (error) {
     throw error;
   }
 };
+
+//GET USERS
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find();
+    res.json(users);
+  } catch (error) {
+    res.json(error);
+  }
+};
+
 
 class LoginByEmailException extends HandleError {
   static errorIncorrectEmailorPassword = "INCORRECT_EMAIL_OR_PASSWORD";
@@ -96,4 +110,5 @@ module.exports = {
   loginByEmail,
   LoginByEmailException,
   CreateUserException,
+  getAllUsers,
 };

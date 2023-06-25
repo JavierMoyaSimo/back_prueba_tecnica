@@ -3,6 +3,9 @@ const jsonwebtoken = require("jsonwebtoken");
 // MIDDLEWARE AUTENTICACION DE TOKEN
 const authBearerMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(403).json({ message: "Invalid type or Bearer token empty" });
+  }
   const [type, jwt] = authorization.split(" ");
   try {
     if (type.toLowerCase() !== "bearer") {
