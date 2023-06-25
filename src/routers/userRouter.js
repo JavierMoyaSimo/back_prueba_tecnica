@@ -7,6 +7,7 @@ const {
   loginByEmail,
   LoginByEmailException,
   getAllUsers,
+  updateUser,
 } = require("../controllers/userController");
 
 const {
@@ -83,5 +84,8 @@ usersRouter.use(authBearerMiddleware);
 
 //Get all users(only admin)
 usersRouter.get("/listusers", isValidRole("admin"), getAllUsers);
+
+// Modify user data
+usersRouter.patch("/modifyuser/:email", isValidUser(), updateUser);
 
 module.exports = usersRouter;

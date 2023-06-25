@@ -89,6 +89,31 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+//MODIFY USER
+const updateUser = async (req, res) => {
+  try {
+    const {email} = req.params;
+    const user = req.body;
+    const userFound = await UserModel.findOne({ email: email }).exec();
+
+    if (userFound) {
+      if (user.password) { 
+        user.password = security.encryptData(user.password); 
+      }
+
+      for (const key in user) {
+        userFound[key] = user[key];
+      }
+      
+      await userFound.save();
+      res.json(userFound);
+    }
+  } catch (error) {
+    res.json({ message: "User not found" });
+  }
+};
+
+
 
 class LoginByEmailException extends HandleError {
   static errorIncorrectEmailorPassword = "INCORRECT_EMAIL_OR_PASSWORD";
@@ -111,4 +136,5 @@ module.exports = {
   LoginByEmailException,
   CreateUserException,
   getAllUsers,
+  updateUser
 };
