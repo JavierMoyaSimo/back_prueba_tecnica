@@ -113,6 +113,22 @@ const updateUser = async (req, res) => {
   }
 };
 
+//DELETE USER
+const deleteUser = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const deletedUser = await UserModel.findOneAndDelete({ email: email }).exec();
+
+    if (!deletedUser) {
+      return res.json({ message: "User not found" });
+    }
+
+    return res.json({ message: "User successfully deleted" });
+  } catch (err) {
+    return res.send(err);
+  }
+};
+
 
 
 class LoginByEmailException extends HandleError {
@@ -136,5 +152,6 @@ module.exports = {
   LoginByEmailException,
   CreateUserException,
   getAllUsers,
-  updateUser
+  updateUser,
+  deleteUser
 };

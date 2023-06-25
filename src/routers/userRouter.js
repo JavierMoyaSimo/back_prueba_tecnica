@@ -8,6 +8,7 @@ const {
   LoginByEmailException,
   getAllUsers,
   updateUser,
+  deleteUser
 } = require("../controllers/userController");
 
 const {
@@ -87,5 +88,8 @@ usersRouter.get("/listusers", isValidRole("admin"), getAllUsers);
 
 // Modify user data
 usersRouter.patch("/modifyuser/:email", isValidUser(), updateUser);
+
+//Delete user(only admin)
+usersRouter.delete("/deleteUser/:email", isValidRole("admin"), deleteUser);
 
 module.exports = usersRouter;
