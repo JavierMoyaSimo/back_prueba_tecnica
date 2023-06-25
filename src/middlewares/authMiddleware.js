@@ -19,4 +19,22 @@ const authBearerMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = {authBearerMiddleware};
+const isValidRole = (rol) => (req, res, next) => {
+  if (req.auth?.rol === rol) {
+    next();
+  } else {
+    return res.status(403).json({ message: "You are not authorized" });
+  }
+};
+
+const isValidUser = (email) => async (req, res, next) => {
+  email = req.params.email || req.body.email;
+
+  if (req.auth?.email === email) {
+    next();
+  } else {
+    return res.status(403).json({ message: "You are not authorized" });
+  }
+};
+
+module.exports = { authBearerMiddleware, isValidRole, isValidUser };
